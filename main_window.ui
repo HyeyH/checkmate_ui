@@ -83,7 +83,7 @@
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="CheckMate/ui/resource.qrc">:/icons/icons/icons8-출석-표-64.png</pixmap>
+            <pixmap resource="resource.qrc">:/icons/icons/icons8-출석-표-64.png</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>
@@ -119,7 +119,7 @@
             <string>홈</string>
            </property>
            <property name="icon">
-            <iconset resource="CheckMate/ui/resource.qrc">
+            <iconset resource="resource.qrc">
              <normaloff>:/icons/icons/icons8-집-48 (1).png</normaloff>:/icons/icons/icons8-집-48 (1).png</iconset>
            </property>
            <property name="iconSize">
@@ -148,7 +148,7 @@
             <string>데이터</string>
            </property>
            <property name="icon">
-            <iconset resource="CheckMate/ui/resource.qrc">
+            <iconset resource="resource.qrc">
              <normaloff>:/icons/icons/icons8-영상-48.png</normaloff>:/icons/icons/icons8-영상-48.png</iconset>
            </property>
            <property name="iconSize">
@@ -177,7 +177,7 @@
             <string>학습</string>
            </property>
            <property name="icon">
-            <iconset resource="CheckMate/ui/resource.qrc">
+            <iconset resource="resource.qrc">
              <normaloff>:/icons/icons/icons8-책-공개-시험-48 (1).png</normaloff>:/icons/icons/icons8-책-공개-시험-48 (1).png</iconset>
            </property>
            <property name="iconSize">
@@ -206,7 +206,7 @@
             <string>검출</string>
            </property>
            <property name="icon">
-            <iconset resource="CheckMate/ui/resource.qrc">
+            <iconset resource="resource.qrc">
              <normaloff>:/icons/icons/icons8-검사-48 (3).png</normaloff>:/icons/icons/icons8-검사-48 (3).png</iconset>
            </property>
            <property name="iconSize">
@@ -250,7 +250,7 @@
           <string>도움말</string>
          </property>
          <property name="icon">
-          <iconset resource="CheckMate/ui/resource.qrc">
+          <iconset resource="resource.qrc">
            <normaloff>:/icons/icons/icons8-search-more-48.png</normaloff>:/icons/icons/icons8-search-more-48.png</iconset>
          </property>
          <property name="iconSize">
