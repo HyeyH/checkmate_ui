@@ -1,18 +1,17 @@
-import sys, os
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QFileDialog, QMessageBox
-from PyQt5.QtGui import QPixmap, QFontDatabase, QIcon, QStandardItemModel, QStandardItem
+import sys
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QFileDialog
+from PyQt5.QtGui import QIcon
 
 from main_window import Ui_MainWindow
-from PyQt5 import uic
-from PyQt5.QtCore import *
 from data_page import DataPage as DP
+
 
 class myMainWindow(QMainWindow):
     def __init__(self):
         super(myMainWindow, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        #self.setFixedSize(QSize(800, 600))
+        # self.setFixedSize(QSize(800, 600))
         # self.setFixedWidth(600)
         # self.setFixedHeight(400)
         self.initUI()
@@ -31,7 +30,7 @@ class myMainWindow(QMainWindow):
         self.data_split_btn = self.ui.data_split_button
 
         self.init_data_btns()
-    
+
     def init_data_btns(self):
         self.data_page = DP()
         self.data_add_btn.clicked.connect(self.data_page.open_add_data)
@@ -51,12 +50,12 @@ class myMainWindow(QMainWindow):
         print("yolo")
 
     def start_autoencoder(self):
-        print("autoencoder")    
-        
+        print("autoencoder")
+
         # 검출
         self.folder_path = self.ui.lineEdit
         self.upload_btn = self.ui.upload_button
-        self.anomaly_btn= self.ui.anomaly_button
+        self.anomaly_btn = self.ui.anomaly_button
 
         self.init_signal_slot()
 
@@ -71,13 +70,13 @@ class myMainWindow(QMainWindow):
     def start_detect(self):
         print("detect")
 
-
     # 화면
     def initUI(self):
         self.setWindowTitle('체크메이트')
         self.setWindowIcon(QIcon('icons/icon.png'))
-        #self.setGeometry(300, 300, 300, 200)
+        # self.setGeometry(300, 300, 300, 200)
         self.show()
+
     # 버튼 클릭시 페이지 변경
     def on_stackedWidget_currentChanged(self, index):
         btn_list = self.ui.menu_widget.findChildren(QPushButton)
@@ -91,21 +90,24 @@ class myMainWindow(QMainWindow):
 
     def on_home_button_toggled(self):
         self.ui.stackedWidget.setCurrentIndex(0)
+
     def on_data_button_toggled(self):
         self.ui.stackedWidget.setCurrentIndex(1)
+
     def on_learn_button_toggled(self):
         self.ui.stackedWidget.setCurrentIndex(2)
+
     def on_detect_button_toggled(self):
         self.ui.stackedWidget.setCurrentIndex(3)
-    def on_helper_button_toggled(self):
-        self.ui.stackedWidget.setCurrentIndex(4)     
 
+    def on_helper_button_toggled(self):
+        self.ui.stackedWidget.setCurrentIndex(4)
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    #fontDB = QFontDatabase()
-    #fontDB.addApplicationFont('')
+    # fontDB = QFontDatabase()
+    # fontDB.addApplicationFont('')
     window = myMainWindow()
     window.show()
     sys.exit(app.exec())

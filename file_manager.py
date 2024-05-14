@@ -18,7 +18,7 @@ class FileManager(QMainWindow):
         self.tree_view = QTreeView()
         self.data_model = QFileSystemModel()
         # 데이터 디렉토리 경로 설정
-        data_directory = "../data"
+        data_directory = "data"
         root_path = QDir.rootPath()
         data_directory = os.path.abspath(os.path.join(os.path.dirname(__file__), data_directory))
         self.data_model.setRootPath(root_path)

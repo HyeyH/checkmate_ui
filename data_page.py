@@ -1,18 +1,16 @@
 import random
 from PyQt5.QtWidgets import (
-    QApplication, QDialog, QLabel, QVBoxLayout, QHBoxLayout, QPushButton, 
-    QMessageBox, QFileDialog, QDialogButtonBox, 
+    QMessageBox, QFileDialog, QDialogButtonBox,
     QRadioButton, QComboBox, QTextEdit
 )
 from PyQt5.QtGui import QFont, QFontDatabase
-from PyQt5.QtCore import Qt
 import os
 import subprocess
 import shutil
 from yolo_crop import YoloCrop as YC
 from PyQt5.QtWidgets import QApplication, QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout
 from PyQt5.QtCore import Qt
-
+import split_dialog
 class TutorialDialog(QDialog):
     def __init__(self):
         super().__init__()
@@ -20,7 +18,7 @@ class TutorialDialog(QDialog):
         self.initUI()
 
     def initUI(self):
-        font_id = QFontDatabase.addApplicationFont("Pretendard-SemiBold.ttf")  
+        font_id = QFontDatabase.addApplicationFont("Pretendard-SemiBold.ttf")
         self.font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
         self.setFont(QFont(self.font_family))
         self.setWindowTitle("설명서")
@@ -57,7 +55,8 @@ class TutorialDialog(QDialog):
         # 다이얼로그를 오른쪽에 위치시킵니다.
         screen_geometry = QApplication.desktop().screenGeometry()
         dialog_geometry = self.geometry()
-        self.move(screen_geometry.width() - dialog_geometry.width(), int((screen_geometry.height() - dialog_geometry.height()) / 2))
+        self.move(screen_geometry.width() - dialog_geometry.width(),
+                  int((screen_geometry.height() - dialog_geometry.height()) / 2))
 
     def nextPage(self):
         self.currentPage += 1
@@ -66,7 +65,7 @@ class TutorialDialog(QDialog):
             self.page_label.setText(f"페이지: {self.currentPage}/{len(self.labels)}")
         else:
             self.currentPage = len(self.labels)
-    
+
     def prevPage(self):
         self.currentPage -= 1
         if self.currentPage >= 1:
@@ -75,41 +74,50 @@ class TutorialDialog(QDialog):
         else:
             self.currentPage = 1
 
+
+
 class DataPage(QDialog):
     def __init__(self):
         super().__init__()
-        font_id = QFontDatabase.addApplicationFont("Pretendard-SemiBold.ttf")  
-        self.font_family = QFontDatabase.applicationFontFamilies(font_id)[0]
-        self.setFont(QFont(self.font_family))
-        
+
     def open_ratio_data(self):
         dialog = QDialog()
-        dialog.resize(500, 400)
-        layout = QVBoxLayout()
+        ui = split_dialog.Ui_split_dialog()
+        ui.setupUi(dialog)
 
-        self.directory_combo = QComboBox()
+        self.layout = ui.layoutWidget
+        self.combo_label = ui.combobox_label
+        self.directory_combo = ui.comboBox
         self.populate_directory_combo()
-        layout.addWidget(self.directory_combo)
-        
-        # 비율을 지정하기 위한 레이블과 입력 필드를 추가합니다.
-        self.ratio_label = QLabel("데이터 분할 비율을 선택해 주세요. 순서대로 train:valid:test 입니다.\n비율이 딱 떨어지지 않는 경우 train에 남는 데이터가 추가됩니다.")
-        layout.addWidget(self.ratio_label)
-
-        self.radio_602020 = QRadioButton("60:20:20")
-        self.radio_603010 = QRadioButton("60:30:10")
-        self.radio_702010 = QRadioButton("70:20:10")
-        radio_layout = QHBoxLayout()
-        radio_layout.addWidget(self.radio_602020)
-        radio_layout.addWidget(self.radio_603010)
-        radio_layout.addWidget(self.radio_702010)    
-        layout.addLayout(radio_layout)
-
-        # 분할 버튼을 추가합니다.
-        self.split_button = QPushButton("데이터 분할")
+        self.verLay5 = ui.verticalLayout_5
+        self.horLay = ui.horizontalLayout
+        self.verLay3 = ui.verticalLayout_3
+        self.train_label = ui.train_label
+        self.train_ratio = ui.train_ratio
+        self.train_slider = ui.train_slider
+        self.train_slider.setRange(60, 80)
+        self.train_slider.setTickInterval(10)
+        self.verLay2 = ui.verticalLayout_2
+        self.valid_label = ui.valid_label
+        self.valid_ratio = ui.valid_ratio
+        self.valid_slider = ui.valid_slider
+        self.valid_slider.setRange(10, 20)
+        self.valid_slider.setTickInterval(10)
+        self.verLay4 = ui.verticalLayout_4
+        self.test_label = ui.test_label
+        self.test_ratio = ui.test_ratio
+        self.test_slider = ui.test_slider
+        self.test_slider.setRange(10, 20)
+        self.test_slider.setTickInterval(10)
+        self.ratio_label = ui.ratio_label
+        self.split_button = ui.split_button
         self.split_button.clicked.connect(self.split_data)
-        layout.addWidget(self.split_button)
 
-        dialog.setLayout(layout) 
+        # 각 슬라이더의 값 변경 시 해당 라벨을 업데이트합니다.
+        self.train_slider.valueChanged.connect(self.update_train_label)
+        self.valid_slider.valueChanged.connect(self.update_valid_label)
+        self.test_slider.valueChanged.connect(self.update_test_label)
+
         dialog.exec_()
 
     def populate_directory_combo(self):
@@ -134,25 +142,17 @@ class DataPage(QDialog):
             QMessageBox.warning(self, "경고", "이미지와 레이블 파일의 수가 일치하지 않습니다.")
             return
 
-        if self.radio_603010.isChecked():
-            ratio_text = "60:30:10"
-        elif self.radio_602020.isChecked():
-            ratio_text = "60:20:20"
-        elif self.radio_702010.isChecked():
-            ratio_text = "70:20:10"  
-        else:
-            QMessageBox.warning(self, "경고", "원하는 분할 비율을 선택하세요.")
+        # train_slider, valid_slider, test_slider의 값으로 데이터셋을 분할하도록 수정합니다.
+        train_ratio = self.train_slider.value() / 100
+        valid_ratio = self.valid_slider.value() / 100
+        test_ratio = self.test_slider.value() / 100
+
+        total = train_ratio + valid_ratio + test_ratio
+        if total != 1:  # 합이 1이 되도록 조정
+            QMessageBox.warning(self, "경고", "슬라이더 값의 합이 1이 되어야 합니다.")
             return
 
         try:
-            # 입력된 비율을 ':'로 분할하여 train, valid, test 비율로 나눕니다.
-            ratios = ratio_text.split(':')
-            if len(ratios) != 3:
-                QMessageBox.warning(self, "Error", "올바른 비율을 입력하세요.")
-                return
-            
-            train_ratio, valid_ratio, test_ratio = map(lambda x: float(x) * 0.01, ratios)
-
             # 디렉터리 생성
             train_dir = os.path.join(directory, 'train')
             valid_dir = os.path.join(directory, 'valid')
@@ -168,7 +168,6 @@ class DataPage(QDialog):
             train_count = int(train_ratio * total_files)
             valid_count = int(valid_ratio * total_files)
             test_count = int(test_ratio * total_files)
-            train_count += total_files - train_count - valid_count - test_count
 
             print(f"total{total_files} train{train_count} valid{valid_count} test{test_count}")
 
@@ -193,6 +192,21 @@ class DataPage(QDialog):
             QMessageBox.information(self, "완료", "데이터 분할이 완료되었습니다.")
         except Exception as e:
             QMessageBox.warning(self, "에러", str(e))
+
+    # train_slider 값이 변경될 때 호출될 슬롯
+    def update_train_label(self):
+        value = self.train_slider.value()
+        self.train_ratio.setText(f"Train: {value}%")
+
+    # valid_slider 값이 변경될 때 호출될 슬롯
+    def update_valid_label(self):
+        value = self.valid_slider.value()
+        self.valid_ratio.setText(f"Valid: {value}%")
+
+    # test_slider 값이 변경될 때 호출될 슬롯
+    def update_test_label(self):
+        value = self.test_slider.value()
+        self.test_ratio.setText(f"Test: {value}%")
 
     def open_label_data(self):
         dialog = QDialog()
@@ -245,6 +259,7 @@ class DataPage(QDialog):
                         QMessageBox.warning(self, "Error", "labelImg 실행 중 오류가 발생했습니다.")
                 else:
                     QMessageBox.warning(self, "Error", "labelImg.exe 파일을 찾을 수 없거나 확장자가 올바르지 않습니다.")
+
         button_ok.clicked.connect(on_button_ok_clicked)
         layout.addWidget(button_ok)
         dialog.setLayout(layout)
@@ -252,12 +267,12 @@ class DataPage(QDialog):
 
     def open_add_data(self):
         dialog = QDialog(self)
-        dialog.setFont(QFont(self.font_family))
+
         dialog.setWindowTitle("데이터 추가")
         dialog.resize(500, 400)
         item_label = QLabel("추가할 데이터의 이름을 영문으로 작성해 주세요. 예) eraser, milk")
 
-        self.item_name = QTextEdit()  
+        self.item_name = QTextEdit()
         item_layout = QVBoxLayout()
         item_layout.addWidget(item_label)
         item_layout.addWidget(self.item_name)
@@ -272,35 +287,35 @@ class DataPage(QDialog):
         file_layout.addWidget(file_label)
         file_layout.addWidget(self.selected_files_label)
         file_layout.addWidget(file_button)
-        
+
         # Dialog layout 생성
         layout = QVBoxLayout()
         layout.addLayout(item_layout)
         layout.addSpacing(20)  # 간격 추가
         layout.addLayout(file_layout)
         layout.addSpacing(40)  # 간격 추가
-        
+
         button_box = QDialogButtonBox(QDialogButtonBox.Ok)
         button_box.accepted.connect(self.add_data)
         button_box.button(QDialogButtonBox.Ok).setText("확인")
-        
+
         layout.addWidget(button_box)
         dialog.setLayout(layout)
-        
+
         dialog.exec_()
 
     def add_data(self):
         # 사용자가 입력한 데이터 이름 가져오기
         item_name_text = self.item_name.toPlainText().strip()
-        
+
         if not item_name_text:
             QMessageBox.warning(self, "경고", "데이터 이름을 입력하세요.")
             return
-        
+
         # 새 디렉터리 생성
         directory = os.path.join('data', item_name_text)
         os.makedirs(directory, exist_ok=True)
-        
+
         if not self.files:
             QMessageBox.warning(self, "경고", "추가할 데이터를 선택하세요.")
             return
@@ -309,9 +324,9 @@ class DataPage(QDialog):
                 src_file = file  # 파일 경로
                 dest_file = os.path.join(directory, os.path.basename(file))  # 대상 디렉토리에 파일 복사
                 if os.path.exists(dest_file):
-                    choice = QMessageBox.question(self, "파일 덮어쓰기", 
-                                                f"파일 '{os.path.basename(dest_file)}'가 이미 존재합니다. 덮어쓰시겠습니까?",
-                                                QMessageBox.Yes | QMessageBox.No)
+                    choice = QMessageBox.question(self, "파일 덮어쓰기",
+                                                  f"파일 '{os.path.basename(dest_file)}'가 이미 존재합니다. 덮어쓰시겠습니까?",
+                                                  QMessageBox.Yes | QMessageBox.No)
                     if choice == QMessageBox.Yes:
                         try:
                             os.remove(dest_file)
@@ -339,7 +354,7 @@ class DataPage(QDialog):
                         shutil.copy(src_file, dest_file)
                     except Exception as e:
                         QMessageBox.warning(self, "오류", f"파일을 복사하는 중 오류가 발생했습니다: {e}")
-        
+
         QMessageBox.information(self, "완료", "데이터 추가가 완료되었습니다.")
 
     def open_file_dialog(self):
@@ -348,3 +363,5 @@ class DataPage(QDialog):
         if self.files:
             self.selected_files_label.setWordWrap(True)
             self.selected_files_label.setText("선택된 파일: " + ", ".join(self.files))
+
+

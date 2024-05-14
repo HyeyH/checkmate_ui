@@ -53,10 +53,10 @@ class Ui_MainWindow(object):
 "#data_page data_button{\n"
 "	color: #fff;\n"
 "}\n"
-"#data_page #menu_widget QPushButton[data_button=\"true\"] {\n"
-"    background-color: #fff;\n"
-"    color: #fff;\n"
-"}")
+"#data_page #menu_widget QPushButton#data_button:pressed {\n"
+"    background-color: <원하는 색상>;\n"
+"    color: <원하는 색상>;\n"
+"}\n")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout = QGridLayout(self.centralwidget)
