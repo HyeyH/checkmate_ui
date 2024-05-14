@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'main_windowriGiAh.ui'
+## Form generated from reading UI file 'main_windowfaPNcs.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -11,8 +11,7 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-
-import resource_rc
+from file_manager import FileManager as FM
 import resource_rc
 
 class Ui_MainWindow(object):
@@ -41,6 +40,22 @@ class Ui_MainWindow(object):
 "}\n"
 "#MainWindow{\n"
 "	background-color:#fff;\n"
+"}\n"
+"#data_page QPushButton:hover{\n"
+"	color: #fff;\n"
+"}\n"
+"#train_page QPushButton:hover{\n"
+"	color: #fff;\n"
+"}\n"
+"#detect_page QPushButton:hover{\n"
+"	color: #fff;\n"
+"}\n"
+"#data_page data_button{\n"
+"	color: #fff;\n"
+"}\n"
+"#data_page #menu_widget QPushButton[data_button=\"true\"] {\n"
+"    background-color: #fff;\n"
+"    color: #fff;\n"
 "}")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
@@ -176,10 +191,6 @@ class Ui_MainWindow(object):
         self.data_page.setObjectName(u"data_page")
         self.gridLayout_3 = QGridLayout(self.data_page)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.verticalSpacer_3 = QSpacerItem(20, 458, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout_3.addItem(self.verticalSpacer_3, 0, 0, 1, 1)
-
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.data_add_button = QPushButton(self.data_page)
@@ -221,29 +232,56 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.data_split_button)
 
 
-        self.gridLayout_3.addLayout(self.horizontalLayout_3, 1, 0, 1, 1)
+        self.gridLayout_3.addLayout(self.horizontalLayout_3, 6, 0, 1, 1)
 
+        self.data_label = QLabel(self.data_page)
+        self.data_label.setObjectName(u"data_label")
+        font4 = QFont()
+        font4.setFamily(u"Pretendard Variable ExtraBold")
+        font4.setPointSize(18)
+        font4.setBold(False)
+        font4.setWeight(50)
+        self.data_label.setFont(font4)
+        self.data_label.setLayoutDirection(Qt.LeftToRight)
+        self.data_label.setAlignment(Qt.AlignCenter)
+
+        self.gridLayout_3.addWidget(self.data_label, 0, 0, 1, 1)
+
+        self.data_info_label = QLabel(self.data_page)
+        self.data_info_label.setObjectName(u"data_info_label")
+        font5 = QFont()
+        font5.setFamily(u"Pretendard Variable SemiBold")
+        font5.setPointSize(10)
+        self.data_info_label.setFont(font5)
+
+        self.gridLayout_3.addWidget(self.data_info_label, 1, 0, 1, 1)
+        self.file_manager = FM()
+        fm_font = QFont()
+        fm_font.setFamily(u"Pretendard Variable SemiBold")
+        fm_font.setPointSize(10)
+        fm_font.setWeight(75)
+        self.gridLayout_3.addWidget(self.file_manager, 4, 0, 1, 1)
         self.stackedWidget.addWidget(self.data_page)
         self.train_page = QWidget()
         self.train_page.setObjectName(u"train_page")
         self.gridLayout_6 = QGridLayout(self.train_page)
         self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.verticalSpacer_4 = QSpacerItem(20, 434, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout_6.addItem(self.verticalSpacer_4, 1, 0, 1, 1)
-
         self.lineEdit_2 = QLineEdit(self.train_page)
         self.lineEdit_2.setObjectName(u"lineEdit_2")
-        font4 = QFont()
-        font4.setPointSize(9)
-        self.lineEdit_2.setFont(font4)
+        font6 = QFont()
+        font6.setPointSize(9)
+        self.lineEdit_2.setFont(font6)
         self.lineEdit_2.setStyleSheet(u"border: 2px solid#a6aaaf;\n"
 "border-radius: 5px;\n"
 "padding: 1px 5px;\n"
 "\n"
 "")
 
-        self.gridLayout_6.addWidget(self.lineEdit_2, 0, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.lineEdit_2, 1, 0, 1, 1)
+
+        self.verticalSpacer_4 = QSpacerItem(20, 434, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout_6.addItem(self.verticalSpacer_4, 2, 0, 1, 1)
 
         self.train_data_upload_button = QPushButton(self.train_page)
         self.train_data_upload_button.setObjectName(u"train_data_upload_button")
@@ -254,7 +292,7 @@ class Ui_MainWindow(object):
 "background-color: #a6aaaf;\n"
 "")
 
-        self.gridLayout_6.addWidget(self.train_data_upload_button, 0, 1, 1, 1)
+        self.gridLayout_6.addWidget(self.train_data_upload_button, 1, 2, 1, 1)
 
         self.gridLayout_5 = QGridLayout()
         self.gridLayout_5.setObjectName(u"gridLayout_5")
@@ -283,13 +321,28 @@ class Ui_MainWindow(object):
         self.gridLayout_5.addWidget(self.yolo_button, 0, 0, 1, 1)
 
 
-        self.gridLayout_6.addLayout(self.gridLayout_5, 2, 0, 1, 3)
+        self.gridLayout_6.addLayout(self.gridLayout_5, 3, 0, 1, 3)
 
         self.stackedWidget.addWidget(self.train_page)
         self.detect_page = QWidget()
         self.detect_page.setObjectName(u"detect_page")
         self.gridLayout_9 = QGridLayout(self.detect_page)
         self.gridLayout_9.setObjectName(u"gridLayout_9")
+        self.anomaly_button = QPushButton(self.detect_page)
+        self.anomaly_button.setObjectName(u"anomaly_button")
+        self.anomaly_button.setFont(font3)
+        self.anomaly_button.setStyleSheet(u"border: 4px solid#a6aaaf;\n"
+"border-radius: 5px;\n"
+"padding: 1px 5px;\n"
+"background-color: #a6aaaf;\n"
+"")
+
+        self.gridLayout_9.addWidget(self.anomaly_button, 2, 0, 1, 1)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 432, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout_9.addItem(self.verticalSpacer_2, 1, 0, 1, 1)
+
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.horizontalLayout_2 = QHBoxLayout()
@@ -320,21 +373,6 @@ class Ui_MainWindow(object):
 
         self.gridLayout_9.addLayout(self.verticalLayout_3, 0, 0, 1, 1)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 432, QSizePolicy.Minimum, QSizePolicy.Expanding)
-
-        self.gridLayout_9.addItem(self.verticalSpacer_2, 1, 0, 1, 1)
-
-        self.anomaly_button = QPushButton(self.detect_page)
-        self.anomaly_button.setObjectName(u"anomaly_button")
-        self.anomaly_button.setFont(font3)
-        self.anomaly_button.setStyleSheet(u"border: 4px solid#a6aaaf;\n"
-"border-radius: 5px;\n"
-"padding: 1px 5px;\n"
-"background-color: #a6aaaf;\n"
-"")
-
-        self.gridLayout_9.addWidget(self.anomaly_button, 2, 0, 1, 1)
-
         self.stackedWidget.addWidget(self.detect_page)
         self.helper_page = QWidget()
         self.helper_page.setObjectName(u"helper_page")
@@ -342,9 +380,9 @@ class Ui_MainWindow(object):
         self.gridLayout_7.setObjectName(u"gridLayout_7")
         self.textBrowser = QTextBrowser(self.helper_page)
         self.textBrowser.setObjectName(u"textBrowser")
-        font5 = QFont()
-        font5.setFamily(u"Pretendard Variable SemiBold")
-        self.textBrowser.setFont(font5)
+        font7 = QFont()
+        font7.setFamily(u"Pretendard Variable SemiBold")
+        self.textBrowser.setFont(font7)
 
         self.gridLayout_7.addWidget(self.textBrowser, 0, 0, 1, 1)
 
@@ -359,7 +397,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -378,11 +416,14 @@ class Ui_MainWindow(object):
         self.data_add_button.setText(QCoreApplication.translate("MainWindow", u"\ub370\uc774\ud130\uc14b \ucd94\uac00", None))
         self.data_label_button.setText(QCoreApplication.translate("MainWindow", u"\ub370\uc774\ud130\uc14b \ub77c\ubca8\ub9c1", None))
         self.data_split_button.setText(QCoreApplication.translate("MainWindow", u"\ub370\uc774\ud130\uc14b \ubd84\ud560", None))
+        self.data_label.setText(QCoreApplication.translate("MainWindow", u"\ub370\uc774\ud130", None))
+        self.data_info_label.setText(QCoreApplication.translate("MainWindow", u"\ubaa8\ub378 \ud559\uc2b5\uc744 \uc704\ud55c \ub370\uc774\ud130\ub97c \uad00\ub9ac\ud558\ub294 \uba54\ub274\uc785\ub2c8\ub2e4.\n"
+"\ud574\ub2f9 \ucc3d\uc5d0\uc11c \ub370\uc774\ud130 \ucd94\uac00, \uc0ad\uc81c, \ub77c\ubca8\ub9c1 \ubd84\ud560\uc774 \uac00\ub2a5\ud569\ub2c8\ub2e4.", None))
         self.train_data_upload_button.setText(QCoreApplication.translate("MainWindow", u"\ubd88\ub7ec\uc624\uae30", None))
         self.autoencoder_button.setText(QCoreApplication.translate("MainWindow", u"AUTOENCODER \ud6c8\ub828", None))
         self.yolo_button.setText(QCoreApplication.translate("MainWindow", u"YOLO \ud6c8\ub828", None))
-        self.upload_button.setText(QCoreApplication.translate("MainWindow", u"\ubd88\ub7ec\uc624\uae30", None))
         self.anomaly_button.setText(QCoreApplication.translate("MainWindow", u"\uac80\ucd9c", None))
+        self.upload_button.setText(QCoreApplication.translate("MainWindow", u"\ubd88\ub7ec\uc624\uae30", None))
         self.textBrowser.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
