@@ -5,6 +5,7 @@ from PyQt5.QtGui import QPixmap, QFontDatabase, QIcon, QStandardItemModel, QStan
 from main_window import Ui_MainWindow
 from PyQt5 import uic
 from PyQt5.QtCore import *
+from data_page import DataPage as DP
 
 class myMainWindow(QMainWindow):
     def __init__(self):
@@ -23,6 +24,19 @@ class myMainWindow(QMainWindow):
         self.autoencoder_btn = self.ui.autoencoder_button
 
         self.init_signal_slot1()
+
+        # 데이터
+        self.data_add_btn = self.ui.data_add_button
+        self.data_label_btn = self.ui.data_label_button
+        self.data_split_btn = self.ui.data_split_button
+
+        self.init_data_btns()
+    
+    def init_data_btns(self):
+        self.data_page = DP()
+        self.data_add_btn.clicked.connect(self.data_page.open_add_data)
+        self.data_label_btn.clicked.connect(self.data_page.open_label_data)
+        self.data_split_btn.clicked.connect(self.data_page.open_ratio_data)
 
     def init_signal_slot1(self):
         self.train_data_upload_btn.clicked.connect(self.get_folder_path1)
